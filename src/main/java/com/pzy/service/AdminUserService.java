@@ -27,6 +27,9 @@ public class AdminUserService {
      public  AdminUser save(AdminUser adminUser){
     	 return adminUserRepository.save(adminUser);
      }
+     public List<AdminUser> findAll(String job){
+    	 return adminUserRepository.findByJob(job);
+     }
      public AdminUser login(String adminUserName,String password){
     	 List<AdminUser> adminUsers=adminUserRepository.findByNameAndPassword(adminUserName,password);
     	 return adminUsers.size()==0?null:adminUsers.get(0);

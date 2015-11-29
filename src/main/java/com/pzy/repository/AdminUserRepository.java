@@ -7,5 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import com.pzy.entity.AdminUser;
 public interface AdminUserRepository extends PagingAndSortingRepository<AdminUser, Long>,JpaSpecificationExecutor<AdminUser>{
 	  public List<AdminUser> findByNameAndPassword(String userName,String password);
+	  public List<AdminUser> findByJob(String job);
 }
 

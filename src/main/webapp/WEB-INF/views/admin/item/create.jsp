@@ -71,25 +71,25 @@
 										<td class='lable'>送车时间：</td>
 										<td colspan="2" >
 											<div class="input-append date">
-											 <input id="createDate" name="createDate" type="text" readonly="readonly" class="form_datetime">
+											 <input id="createDate" name="item.createDate" type="text" readonly="readonly" class="form_datetime">
 											 <span class="add-on"><i class="icon-th"></i></span>
 										    </div>
 										</td>
 										<td class='lable'>要求取车时间：</td>
 										<td colspan="2" >
 											<div class="input-append date">
-											 <input id="createDate" name="needDate" type="text" readonly="readonly" class="form_datetime">
+											 <input id="createDate" name="item.needDate" type="text" readonly="readonly" class="form_datetime">
 											 <span class="add-on"><i class="icon-th"></i></span>
 										    </div>
 										</td>
 										</tr>
 									<tr>
 										<td class='lable'>客户地址：<span class="text-error">*</span></td>
-										<td colspan="5" ><textarea  name='user.addr' style="width: 90%" rows="2" cols=""></textarea> </td>
+										<td colspan="5" ><textarea  name='item.addr' style="width: 90%" rows="2" cols=""></textarea> </td>
 									</tr>
 									<tr>
 										<td class='lable'>故障描述：<span class="text-error">*</span></td>
-										<td colspan="5" ><textarea  name='user.remark' style="width: 90%" rows="2" cols=""></textarea> </td>
+										<td colspan="5" ><textarea  name='item.remark' style="width: 90%" rows="2" cols=""></textarea> </td>
 									</tr>
 									<tr  class='remark'>
 										<td colspan="6">

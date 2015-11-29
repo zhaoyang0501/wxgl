@@ -17,10 +17,13 @@ import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import com.pzy.entity.AdminUser;
 import com.pzy.entity.Category;
 import com.pzy.entity.Item;
 import com.pzy.entity.Seller;
+import com.pzy.service.AdminUserService;
 import com.pzy.service.CategoryService;
 import com.pzy.service.ItemService;
 import com.pzy.service.SellerService;
@@ -49,6 +52,7 @@ public class ItemAction extends ActionSupport {
 	private String imgPathContentType;
 	private String imgPathFileName;
 	private List<Seller> sellers;
+	private List<AdminUser> adminUsers;
 	private List<Category> categorys;
 	@Autowired
 	private ItemService itemService;
@@ -56,27 +60,111 @@ public class ItemAction extends ActionSupport {
 	private CategoryService categoryService;
 	@Autowired
 	private SellerService sellerService;
-
+	@Autowired
+	private AdminUserService adminUserService;
 	@Action(value = "create", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/create.jsp") })
 	public String create() {
 		sellers = sellerService.findAll();
 		categorys = categoryService.findCategorys();
 		return SUCCESS;
 	}
-	
+	@Action(value = "notice", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/notice.jsp") })
+	public String notice() {
+		this.adminUsers=adminUserService.findAll("维修工");
+		return SUCCESS;
+	}
+	@Action(value = "work", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/work.jsp") })
+	public String work() {
+		this.adminUsers=adminUserService.findAll("维修工");
+		return SUCCESS;
+	}
+	@Action(value = "send", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/send.jsp") })
+	public String send() {
+		this.adminUsers=adminUserService.findAll("维修工");
+		return SUCCESS;
+	}
 	@Action(value = "index", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/index.jsp") })
 	public String index() {
 		sellers = sellerService.findAll();
 		categorys = categoryService.findCategorys();
 		return SUCCESS;
 	}
-
+	@Action(value = "noticelist", results = { @Result(name = "success", type = "json") }, params = {
+			"contentType", "text/html" })
+	public String noticelist() {
+		int pageNumber = (int) (iDisplayStart / iDisplayLength) + 1;
+		int pageSize = iDisplayLength;
+		AdminUser user=(AdminUser)ActionContext.getContext().getSession().get("adminuser");
+		Page<Item> list = itemService.findAll(pageNumber, pageSize, name,null,null,"修理完成");
+		resultMap.put("aaData", list.getContent());
+		resultMap.put("iTotalRecords", list.getTotalElements());
+		resultMap.put("iTotalDisplayRecords", list.getTotalElements());
+		resultMap.put("sEcho", sEcho);
+		return SUCCESS;
+	}
+	@Action(value = "worklist", results = { @Result(name = "success", type = "json") }, params = {
+			"contentType", "text/html" })
+	public String worklist() {
+		int pageNumber = (int) (iDisplayStart / iDisplayLength) + 1;
+		int pageSize = iDisplayLength;
+		AdminUser user=(AdminUser)ActionContext.getContext().getSession().get("adminuser");
+		Page<Item> list = itemService.findAll(pageNumber, pageSize, name,null,user,"维修工处理中");
+		resultMap.put("aaData", list.getContent());
+		resultMap.put("iTotalRecords", list.getTotalElements());
+		resultMap.put("iTotalDisplayRecords", list.getTotalElements());
+		resultMap.put("sEcho", sEcho);
+		return SUCCESS;
+	}
+	@Action(value = "sendlist", results = { @Result(name = "success", type = "json") }, params = {
+			"contentType", "text/html" })
+	public String sendlist() {
+		int pageNumber = (int) (iDisplayStart / iDisplayLength) + 1;
+		int pageSize = iDisplayLength;
+		AdminUser user=(AdminUser)ActionContext.getContext().getSession().get("adminuser");
+		Page<Item> list = itemService.findAll(pageNumber, pageSize, name,user,null,"新建");
+		resultMap.put("aaData", list.getContent());
+		resultMap.put("iTotalRecords", list.getTotalElements());
+		resultMap.put("iTotalDisplayRecords", list.getTotalElements());
+		resultMap.put("sEcho", sEcho);
+		return SUCCESS;
+	}
+	@Action(value = "donotice", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/notice.jsp") })
+	public String donotice() {
+		Item itemToupdate = itemService.find(item.getId());
+		itemToupdate.setState("工单结束");
+		itemToupdate.setNoticeremark(item.getNoticeremark());
+		tip="工单结束";
+		itemService.save(itemToupdate);
+		this.adminUsers=adminUserService.findAll("维修工");
+		return SUCCESS;
+	}
+	@Action(value = "dosend", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/send.jsp") })
+	public String dosend() {
+		Item itemToupdate = itemService.find(item.getId());
+		itemToupdate.setState("维修工处理中");
+		itemToupdate.setWorker(adminUserService.find(item.getWorker().getId()));
+		tip="该工单已经分配给修理工"+adminUserService.find(item.getWorker().getId()).getRealname();
+		itemService.save(itemToupdate);
+		this.adminUsers=adminUserService.findAll("维修工");
+		return SUCCESS;
+	}
+	@Action(value = "dowork", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/work.jsp") })
+	public String dowork() {
+		Item itemToupdate = itemService.find(item.getId());
+		itemToupdate.setWorkremark(item.getWorkremark());
+		itemToupdate.setState("修理完成");
+		tip="该工单已已经处理完毕等待客服通知客户取车";
+		itemService.save(itemToupdate);
+		this.adminUsers=adminUserService.findAll("维修工");
+		return SUCCESS;
+	}
 	@Action(value = "list", results = { @Result(name = "success", type = "json") }, params = {
 			"contentType", "text/html" })
 	public String list() {
 		int pageNumber = (int) (iDisplayStart / iDisplayLength) + 1;
 		int pageSize = iDisplayLength;
-		Page<Item> list = itemService.findAll(pageNumber, pageSize, name);
+		AdminUser user=(AdminUser)ActionContext.getContext().getSession().get("adminuser");
+		Page<Item> list = itemService.findAll(pageNumber, pageSize, name,user,null,"新建");
 		resultMap.put("aaData", list.getContent());
 		resultMap.put("iTotalRecords", list.getTotalElements());
 		resultMap.put("iTotalDisplayRecords", list.getTotalElements());
@@ -86,8 +174,11 @@ public class ItemAction extends ActionSupport {
 
 	@Action(value = "save", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/create.jsp") })
 	public String save() throws Exception {
+		AdminUser user=(AdminUser)ActionContext.getContext().getSession().get("adminuser");
+		item.setCreater(user);
+		item.setState("新建");
 		itemService.save(item);
-		tip = "操作成功！";
+		tip = "工单录入成功！";
 		return SUCCESS;
 	}
 	@Action(value = "savekc", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/index.jsp") })
@@ -252,5 +343,11 @@ public class ItemAction extends ActionSupport {
 
 	public void setSellers(List<Seller> sellers) {
 		this.sellers = sellers;
+	}
+	public List<AdminUser> getAdminUsers() {
+		return adminUsers;
+	}
+	public void setAdminUsers(List<AdminUser> adminUser) {
+		this.adminUsers = adminUser;
 	}
 }

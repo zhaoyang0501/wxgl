@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.pzy.entity.AdminUser;
 import com.pzy.entity.Category;
 import com.pzy.entity.Item;
 import com.pzy.repository.ItemRepository;
@@ -28,7 +29,7 @@ public class ItemService {
 	}
 	
 	public Page<Item> findAll(final int pageNumber, final int pageSize,
-			final String name) {
+			final String name,final AdminUser creater,final AdminUser worker,final String state) {
 		PageRequest pageRequest = new PageRequest(pageNumber - 1, pageSize,
 				new Sort(Direction.DESC, "id"));
 
@@ -37,9 +38,16 @@ public class ItemService {
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate = cb.conjunction();
 				if (name != null) {
-					predicate.getExpressions().add(
-							cb.like(root.get("name").as(String.class),"%"+ name
-									+ "%"));
+					predicate.getExpressions().add(cb.like(root.get("name").as(String.class),"%"+ name+ "%"));
+				}
+				if (state != null) {
+					predicate.getExpressions().add(cb.equal(root.get("state").as(String.class),state));
+				}
+				if (worker != null) {
+					predicate.getExpressions().add(cb.equal(root.get("worker").as(AdminUser.class),worker));
+				}
+				if (creater != null) {
+					predicate.getExpressions().add(cb.equal(root.get("creater").as(AdminUser.class),creater));
 				}
 				return predicate;
 			}

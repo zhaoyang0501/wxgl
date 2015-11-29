@@ -126,6 +126,7 @@ jQuery.adminCategory = {
 	    			url : $.ace.getContextPath() + "/admin/category/save",
 	    			data:{
 	    				"category.name":$("#name").val(),
+	    				"category.num":$("#num").val(),
 	    				"category.remark":$("#remark").val()
 	    			},
 	    			dataType : "json",
@@ -145,6 +146,7 @@ jQuery.adminCategory = {
 	    			url : $.ace.getContextPath() + "/admin/category/update",
 	    			data:{
 	    				"category.id":$("#categoryId").val(),
+	    				"category.num":$("#num").val(),
 	    				"category.name":$("#name").val(),
 	    				"category.remark":$("#remark").val()
 	    			},

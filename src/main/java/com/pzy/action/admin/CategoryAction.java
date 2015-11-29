@@ -89,6 +89,11 @@ public class CategoryAction extends ActionSupport {
 			"contentType", "text/html" })
 	public String update() {
 		Category bean = categoryService.find(category.getId());
+		bean.setNum(category.getNum());
+		if(bean.getNum()<50)
+			bean.setState("库存不足");
+		else
+			bean.setState("正常");
 		bean.setName(category.getName());
 		bean.setRemark(category.getRemark());
 		categoryService.save(bean);
@@ -101,6 +106,10 @@ public class CategoryAction extends ActionSupport {
 			"contentType", "text/html" })
 	public String save() {
 		category.setCreateDate(new Date(System.currentTimeMillis()));
+		if(category.getNum()<50)
+			category.setState("库存不足");
+		else
+			category.setState("正常");
 		categoryService.save(category);
 		resultMap.put("state", "success");
 		resultMap.put("msg", "保存成功");

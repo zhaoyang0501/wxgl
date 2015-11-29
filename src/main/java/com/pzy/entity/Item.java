@@ -29,6 +29,51 @@ public class Item  {
 	private String userid;
 	private Date crateDate;
 	private String needDate;
+	private String workremark;
+	private String noticeremark;
+	public String getNoticeremark() {
+		return noticeremark;
+	}
+
+	public void setNoticeremark(String noticeremark) {
+		this.noticeremark = noticeremark;
+	}
+
+	public String getWorkremark() {
+		return workremark;
+	}
+
+	public void setWorkremark(String workremark) {
+		this.workremark = workremark;
+	}
+	private String state;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AdminUser creater;
+	public AdminUser getCreater() {
+		return creater;
+	}
+
+	public void setCreater(AdminUser creater) {
+		this.creater = creater;
+	}
+
+	public AdminUser getWorker() {
+		return worker;
+	}
+
+	public void setWorker(AdminUser worker) {
+		this.worker = worker;
+	}
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AdminUser worker;
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	public String getAddr() {
 		return addr;
 	}

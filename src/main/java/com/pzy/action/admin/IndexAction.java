@@ -69,8 +69,8 @@ public class IndexAction  extends ActionSupport{
      public String gologin(){
     	String safecodesession=(String) ActionContext.getContext().getSession().get("safecode");
     	if(!safecodesession.equals(safecode)){
-    		//this.tip="验证码不正确!";
-    		//return LOGIN;
+    		this.tip="验证码不正确!";
+    		return LOGIN;
     	}
     	AdminUser adminUser=adminUserService.login(this.userName, this.password);
     	

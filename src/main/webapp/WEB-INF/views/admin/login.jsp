@@ -26,7 +26,7 @@
 					</div>
 					<div class="controls input-icon">
 						<i class=" icon-key"></i><input type="text" id="safecode" name="safecode" class="input-block-level" data-placeholder="验证码"/ >
-						<img alt="验证码" src="/csgl/servlet/safecode.ppp">  
+						<img alt="验证码" src="/wxgl/servlet/safecode.ppp">  
 					</div>
 					
        				 
