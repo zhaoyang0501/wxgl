@@ -1,14 +1,9 @@
 package com.pzy.action.admin;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -22,11 +17,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.pzy.entity.AdminUser;
 import com.pzy.entity.Category;
 import com.pzy.entity.Item;
-import com.pzy.entity.Seller;
 import com.pzy.service.AdminUserService;
 import com.pzy.service.CategoryService;
 import com.pzy.service.ItemService;
-import com.pzy.service.SellerService;
 
 /***
  * @author 263608237@qq.com
@@ -47,11 +40,6 @@ public class ItemAction extends ActionSupport {
 	private Item item;
 	/**操作提示返回的消息*/
 	private String tip;
-	/*这三个参数用于文件上传**/
-	private File imgPath;
-	private String imgPathContentType;
-	private String imgPathFileName;
-	private List<Seller> sellers;
 	private List<AdminUser> adminUsers;
 	private List<Category> categorys;
 	@Autowired
@@ -59,12 +47,9 @@ public class ItemAction extends ActionSupport {
 	@Autowired
 	private CategoryService categoryService;
 	@Autowired
-	private SellerService sellerService;
-	@Autowired
 	private AdminUserService adminUserService;
 	@Action(value = "create", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/create.jsp") })
 	public String create() {
-		sellers = sellerService.findAll();
 		categorys = categoryService.findCategorys();
 		return SUCCESS;
 	}
@@ -85,7 +70,6 @@ public class ItemAction extends ActionSupport {
 	}
 	@Action(value = "index", results = { @Result(name = "success", location = "/WEB-INF/views/admin/item/index.jsp") })
 	public String index() {
-		sellers = sellerService.findAll();
 		categorys = categoryService.findCategorys();
 		return SUCCESS;
 	}
@@ -94,7 +78,6 @@ public class ItemAction extends ActionSupport {
 	public String noticelist() {
 		int pageNumber = (int) (iDisplayStart / iDisplayLength) + 1;
 		int pageSize = iDisplayLength;
-		AdminUser user=(AdminUser)ActionContext.getContext().getSession().get("adminuser");
 		Page<Item> list = itemService.findAll(pageNumber, pageSize, name,null,null,"修理完成");
 		resultMap.put("aaData", list.getContent());
 		resultMap.put("iTotalRecords", list.getTotalElements());
@@ -186,7 +169,6 @@ public class ItemAction extends ActionSupport {
 		Item newitem=itemService.find(item.getId());
 		newitem.setCount(item.getCount());
 		itemService.save(newitem);
-		sellers = sellerService.findAll();
 		categorys = categoryService.findCategorys();
 		tip = "操作成功！";
 		return SUCCESS;
@@ -311,38 +293,6 @@ public class ItemAction extends ActionSupport {
 
 	public void setTip(String tip) {
 		this.tip = tip;
-	}
-
-	public File getImgPath() {
-		return imgPath;
-	}
-
-	public void setImgPath(File imgPath) {
-		this.imgPath = imgPath;
-	}
-
-	public String getImgPathContentType() {
-		return imgPathContentType;
-	}
-
-	public void setImgPathContentType(String imgPathContentType) {
-		this.imgPathContentType = imgPathContentType;
-	}
-
-	public String getImgPathFileName() {
-		return imgPathFileName;
-	}
-
-	public void setImgPathFileName(String imgPathFileName) {
-		this.imgPathFileName = imgPathFileName;
-	}
-
-	public List<Seller> getSellers() {
-		return sellers;
-	}
-
-	public void setSellers(List<Seller> sellers) {
-		this.sellers = sellers;
 	}
 	public List<AdminUser> getAdminUsers() {
 		return adminUsers;

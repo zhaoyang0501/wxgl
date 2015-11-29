@@ -96,7 +96,7 @@
 								<div class="controls">
 									<select id='category' name='item.worker.id'>
 											<c:forEach items="${adminUsers }" var="bean">
-												<option value="${bean.id }">${bean.realname }</option>
+												<option value="${bean.id }">${bean.realname }（目前待处理工单：1件）</option>
 											</c:forEach>
 									</select>
 								</div>

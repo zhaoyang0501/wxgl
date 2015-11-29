@@ -2,7 +2,7 @@ package com.pzy.entity;
 
 import java.util.Date;
 /***
- * 分类
+ * 零部件
  *
  */
 import javax.persistence.Entity;

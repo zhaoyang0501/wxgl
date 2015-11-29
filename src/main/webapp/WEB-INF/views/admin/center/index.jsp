@@ -9,17 +9,6 @@
 <script src="${pageContext.request.contextPath}/admin/js/falgun/bootstrap-datetimepicker.min.js"></script>
 <script src="${pageContext.request.contextPath}/admin/js/falgun/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript">
-function AngelMoney(s){
-	   if(/[^0-9\.]/.test(s)) return "不是数字！";
-	   s=s.replace(/^(\d*)$/,"$1.");
-	   s=(s+"00").replace(/(\d*\.\d\d)\d*/,"$1");
-	   s=s.replace(".",",");
-	   var re=/(\d)(\d{3},)/;
-	   while(re.test(s))
-	           s=s.replace(re,"$1,$2");
-	   s=s.replace(/,(\d\d)$/,".$1");
-	   return "￥" + s.replace(/^\./,"0.")
-	}
 	function fun_getitem(){
 		$.ajax({
 			type : "POST",

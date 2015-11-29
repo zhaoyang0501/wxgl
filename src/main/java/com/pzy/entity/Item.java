@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import org.apache.struts2.json.annotations.JSON;
 /***
- *商品
+ *工单
  *
  */
 @Entity
